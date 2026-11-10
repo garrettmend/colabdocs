@@ -1,0 +1,8 @@
+Quarterly retro
+
+What went well:
+We shipped the editor on time.
+Sharing worked on the first try.
+
+What to improve:
+Write tests earlier.

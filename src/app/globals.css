@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/* Light-only UI: a document editor reads as "paper", and one theme kept the
+   scope tight. Colors are tokens so a dark theme is a contained change later. */
+:root {
+  --background: #f6f7f9;
+  --foreground: #1f2328;
+  --muted: #5f6b7a;
+  --border: #e3e6ea;
+  --accent: #2563eb;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--border);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* ---- Document content (editor + any rendered document HTML) ---- */
+.doc-content {
+  outline: none;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #1f2328;
+  min-height: 60vh;
+}
+.doc-content > * + * { margin-top: 0.75em; }
+.doc-content h1 { font-size: 2rem; line-height: 1.25; font-weight: 700; margin-top: 1.2em; letter-spacing: -0.01em; }
+.doc-content h2 { font-size: 1.5rem; line-height: 1.3; font-weight: 650; margin-top: 1.1em; }
+.doc-content h3 { font-size: 1.2rem; line-height: 1.4; font-weight: 600; margin-top: 1em; }
+.doc-content > :first-child { margin-top: 0; }
+.doc-content ul { list-style: disc; padding-left: 1.6em; }
+.doc-content ol { list-style: decimal; padding-left: 1.6em; }
+.doc-content li > p { margin: 0; }
+.doc-content li + li { margin-top: 0.25em; }
+.doc-content ul ul { list-style: circle; }
+.doc-content blockquote { border-left: 3px solid #cfd6de; padding-left: 1em; color: #4b5563; }
+.doc-content code { font-family: var(--font-geist-mono); font-size: 0.9em; background: #f1f3f5; padding: 0.1em 0.35em; border-radius: 4px; }
+.doc-content pre { background: #f1f3f5; padding: 0.9em 1em; border-radius: 8px; overflow-x: auto; }
+.doc-content pre code { background: none; padding: 0; }
+.doc-content a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.doc-content hr { border: none; border-top: 1px solid var(--border); margin: 1.5em 0; }
+.doc-content strong { font-weight: 650; }
+
+/* Placeholder for an empty document */
+.doc-content p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #9aa4b2;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
