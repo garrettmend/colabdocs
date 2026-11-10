@@ -4,6 +4,8 @@ A lightweight collaborative document editor: create and format documents, import
 
 Built with Next.js 16, TypeScript, TipTap (ProseMirror) and SQLite (libSQL). Deploys to Railway as a single service with a persistent volume.
 
+**Live demo:** https://colabdocs-production.up.railway.app
+
 ## Demo accounts
 
 Sign-in is simulated: pick an account on the sign-in page (no passwords). Switch accounts from the avatar menu (top right) → **Switch demo account**.
@@ -56,10 +58,11 @@ npm run build
 
 The app runs as a single Railway service: one Node process (`next start`) with its SQLite database file on a persistent **Railway volume**. There is no external database to sign up for.
 
-1. **Create the service.** In Railway: **New Project → Deploy from GitHub repo** → choose this repository. Railway detects Next.js and runs `npm ci` and `npm run build`. Start command, health check and restart policy come from [`railway.json`](railway.json).
-2. **Attach a volume.** In the service, open **Settings → Volumes** (or right-click the service → *Attach volume*) and set the mount path to `/data`. The app stores its database at `<mount path>/colabdocs.db` automatically, using the `RAILWAY_VOLUME_MOUNT_PATH` variable that Railway sets.
+1. **Create the service.** In Railway: **New Project → Deploy from GitHub repo** → choose this repository. Railway detects Next.js, runs `npm ci` and `npm run build`, and starts the app with `npm start`.
+2. **Attach a volume.** Right-click the service → **Attach volume** and set the mount path to `/data`. The app stores its database at `<mount path>/colabdocs.db` automatically, using the `RAILWAY_VOLUME_MOUNT_PATH` variable that Railway sets. Without a volume the app refuses to serve requests in production.
 3. **Set one variable.** In **Variables**, add `SESSION_SECRET` with a long random string, e.g. the output of `openssl rand -base64 32`.
-4. **Expose it.** In **Settings → Networking**, click **Generate Domain**.
+4. **Add the health check.** In **Settings → Deploy → Healthcheck Path**, enter `/api/health`. Railway no longer applies [`railway.json`](railway.json) to new services, so set this by hand; without it a misconfigured deploy still shows as "Online".
+5. **Expose it.** In **Settings → Networking**, click **Generate Domain** (port 8080).
 
 On the first request the app creates the schema and seeds the demo accounts and documents. This is idempotent: it seeds once per database and never re-creates documents a user deletes.
 
